@@ -20,6 +20,42 @@ jQuery(document).ready(function($){
 			scrollTop: jQuery("#mh-comments").offset().top
 		}, 400);
 		return false;
-	});
+	})
 
+	/* Sticky Menu */
+	
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
+var initPosition = jQuery('div.mh-main-nav-mobile').position().top;
+var a = debounce(function() { 
+
+			var menuPos = jQuery('div.mh-main-nav-mobile').position().top - jQuery(window).scrollTop() + jQuery('div.mh-main-nav-mobile').height();
+			if(menuPos <= 0)  {
+				jQuery('div.mh-main-nav-mobile').addClass('ag-stycky-menu'); 
+			} else if(jQuery(window).scrollTop() <= initPosition) {
+				jQuery('div.mh-main-nav-mobile').removeClass('ag-stycky-menu');
+				/*jQuery('div.mh-main-nav-mobile')
+					.css('position','static')
+					.css('top','auto')
+					.css('width','auto'); */
+			}
+			
+		}, 10); 
+		
+	$(function(){
+		jQuery(document).scroll(a);
+	});
 });
